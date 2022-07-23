@@ -10,3 +10,8 @@ Midelware de mongoose
 - npm i jsonwebtoken (instalación de dependencia)
 
 ### Creando rutas protegidas con  midleware
+
+
+### Notas
+- req.body para leer contenido de formulario
+- req.params para leer contenido de una url
