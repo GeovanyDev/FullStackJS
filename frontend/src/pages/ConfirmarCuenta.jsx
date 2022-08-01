@@ -1,11 +1,57 @@
-
+import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import clienteAxios from "../config/axios";
+import Alerta from "../components/Alerta";
 
 const ConfirmarCuenta = () => {
-    return (
-      <>
-          <h1>Desde ConfirmarCuenta</h1>
-      </>
-    )
-  }
-  
-  export default ConfirmarCuenta
+  const [cuentaConfirmada, setCuanetaConfirmada] = useState(false);
+  const [cargando, setCargando] = useState(true);
+  const [alerta, setAlerta] = useState({});
+
+  const params = useParams();
+  const { id } = params;
+
+  useEffect(() => {
+    const confirmarCuenta = async () => {
+      try {
+        const url = `/veterinarios/confirmar/${id}`;
+        const { data } = await clienteAxios(url);
+        setCuanetaConfirmada(true);
+
+        setAlerta({
+          msg: data.msg,
+        });
+      } catch (error) {
+        setAlerta({
+          msg: error.response.data.msg,
+          error: true,
+        });
+      }
+      setCargando(false);
+    };
+    confirmarCuenta();
+  }, []);
+
+  return (
+    <>
+      <div>
+        <h1 className="text-indigo-600 font-black text-6xl text-center">
+          Confirma tu Cuenta y Comineza a Administrar {""}{" "}
+          <span className="text-black">tus Pacientes</span>
+        </h1>
+      </div>
+
+      <div className="mt-20 md:mt-10 shadow-lg px-10 rounded-xl bg-white">
+        { !cargando && 
+        <Alerta alerta={alerta} />}
+        { cuentaConfirmada &&
+          (<Link className="block text-center my-5 text-gray-500" to="/">
+            Iniciar Sesión
+          </Link>)
+        }
+      </div>
+    </>
+  );
+};
+
+export default ConfirmarCuenta;
